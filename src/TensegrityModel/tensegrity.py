@@ -1,4 +1,5 @@
 import os.path as osp
+from src.TensegrityModel.scene import create_scene
 
 
 class Tensegrity:
@@ -29,11 +30,14 @@ class Tensegrity:
         """
         Create xml model for tensegrity
         Args:
-            path: Absolute path for storing xml
+            path: Absolute path of folder for storing xml
 
         Returns: a xml file
 
         """
+        # create scene.xml
+        create_scene(path)
+
         xml_path = self.name + '.xml'
         xml_path = osp.join(path, xml_path)
         xml_file = open(xml_path, 'w')
