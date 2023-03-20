@@ -1,6 +1,7 @@
 import os.path as osp
 
-class Tensegrity():
+
+class Tensegrity:
     """
     .. note::
 
@@ -24,10 +25,17 @@ class Tensegrity():
         self.cables = cables
         self.actuators = actuators
 
-    def create_xml(self):
+    def create_xml(self, path):
+        """
+        Create xml model for tensegrity
+        Args:
+            path: Absolute path for storing xml
+
+        Returns: a xml file
+
+        """
         xml_path = self.name + '.xml'
-        dirname = osp.dirname(__file__)
-        xml_path = osp.join(dirname, 'model', xml_path)
+        xml_path = osp.join(path, xml_path)
         xml_file = open(xml_path, 'w')
 
         # file header
