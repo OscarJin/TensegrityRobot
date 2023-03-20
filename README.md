@@ -14,3 +14,7 @@ Design, fabrication, control and simulation of tensegrity robots
 The class `Tensegrity` in `src/TesengrityModel/tensegrity_builder.py` can automatically generate an XML model, which can be directly loaded by Mujoco.
 
 Just input coordinates of nodes, pairs of bars and cables, and generate the XML model!
+
+<u><i>Warning:</i></u>
+
+The Mujoco model for tensegrity may not be accurate, since it has not yet been verified by the real world.
