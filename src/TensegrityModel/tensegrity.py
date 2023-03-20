@@ -40,30 +40,32 @@ class Tensegrity:
 
         # file header
         header = f"""
-        <mujoco model="{self.name}">
+<mujoco model="{self.name}">
 
-        <include file="scene.xml"/>
+<include file="scene.xml"/>
 
-        <option timestep="0.002" iterations="100" solver="PGS" jacobian="dense" gravity = "0 0 -9.8" viscosity="0"/>
+<option timestep="0.002" iterations="100" solver="PGS" jacobian="dense" gravity = "0 0 -9.8" viscosity="0"/>
 
-        <size njmax="5000" nconmax="500" nstack="5000000"/>
+<size njmax="5000" nconmax="500" nstack="5000000"/>
 
-        <asset>
-            <material name="rod" rgba=".7 .5 .3 1"/>
-        </asset>
+<asset>
+    <material name="rod" rgba=".7 .5 .3 1"/>
+</asset>
     
-        <default>
-            <motor ctrllimited="false" ctrlrange="-100 100"/>
-            <tendon stiffness="100" damping="1" range=".5 2" springlength=".5" frictionloss=".2"/>
-            <geom size="0.02" mass=".1"/>
-            <site size="0.04"/>
-            <camera pos="0 -10 0"/>
-        </default>
+<default>
+    <motor ctrllimited="false" ctrlrange="-100 100"/>
+    <tendon stiffness="100" damping="1" range=".5 2" springlength=".5" frictionloss=".2"/>
+    <geom size="0.02" mass=".1"/>
+    <site size="0.04"/>
+    <camera pos="0 -10 0"/>
+</default>
         """
         xml_file.write(header)
 
         # file end
-        end = '</mujoco>'
+        end = """
+</mujoco>
+        """
         xml_file.write(end)
 
         xml_file.close()
