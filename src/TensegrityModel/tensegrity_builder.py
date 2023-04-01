@@ -60,7 +60,7 @@ class Tensegrity:
     
     <default>
         <motor ctrllimited="false" ctrlrange="-100 100"/>
-        <tendon stiffness="{stiffness}" damping="{damping}" range=".5 2" springlength=".5" frictionloss=".2"/>
+        <tendon stiffness="{stiffness}" damping="{damping}" springlength=".5" frictionloss=".2"/>
         <geom size="0.02" mass=".1"/>
         <site size="0.04"/>
         <camera pos="0 -10 0"/>
