@@ -6,7 +6,6 @@ def create_scene(floor_pos=-.1):
     """
     Create scenic settings
     Args:
-        path: absolute path of folder for storing scene.xml
         floor_pos: z position of floor, default -1
 
     Returns: a xml string of scenic settings
