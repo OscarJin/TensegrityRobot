@@ -2,23 +2,19 @@
 import os.path as osp
 
 
-def create_scene(path, floor_pos=-1):
+def create_scene(floor_pos=-.1):
     """
-    Create scene.xml
+    Create scenic settings
     Args:
         path: absolute path of folder for storing scene.xml
         floor_pos: z position of floor, default -1
 
-    Returns:
+    Returns: a xml string of scenic settings
 
     """
-    xml_path = 'scene.xml'
-    xml_path = osp.join(path, xml_path)
-    scene_file = open(xml_path, 'w')
+    scene_msg = ""
 
     default_msg = """
-<mujoco>
-
     <statistic extent="2" meansize=".05"/>
 
     <visual>
@@ -35,7 +31,7 @@ def create_scene(path, floor_pos=-1):
         <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true"/>
     </asset>
     """
-    scene_file.write(default_msg)
+    scene_msg += default_msg
 
     # world body
     world_body = f"""
@@ -45,7 +41,7 @@ def create_scene(path, floor_pos=-1):
     </worldbody>
 
     """
-    scene_file.write(world_body)
+    scene_msg += world_body
 
     # visual
     visual = """
@@ -54,8 +50,7 @@ def create_scene(path, floor_pos=-1):
         <map znear=".01"/>
         <quality shadowsize="2048"/>
     </visual>
-</mujoco>
     """
-    scene_file.write(visual)
+    scene_msg += visual
 
-    scene_file.close()
+    return scene_msg

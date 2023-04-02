@@ -37,8 +37,8 @@ class Tensegrity:
         Returns: a xml file
 
         """
-        # create scene.xml
-        create_scene(path)
+        # create scenic settings
+        scene_msg = create_scene()
 
         xml_path = self.name + '.xml'
         xml_path = osp.join(path, xml_path)
@@ -47,8 +47,12 @@ class Tensegrity:
         # file header
         header = f"""
 <mujoco model="{self.name}">
+        """
+        header += scene_msg
 
-    <include file="scene.xml"/>
+        xml_file.write(header)
+
+        default = f"""
 
     <option timestep="0.002" iterations="100" solver="PGS" jacobian="dense" gravity = "0 0 -9.8" viscosity="0"/>
 
@@ -66,7 +70,7 @@ class Tensegrity:
         <camera pos="0 -10 0"/>
     </default>
         """
-        xml_file.write(header)
+        xml_file.write(default)
 
         # world body
         world_body_start = """

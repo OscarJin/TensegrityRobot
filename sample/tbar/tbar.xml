@@ -1,7 +1,34 @@
 
-<mujoco model="Tbar">
+<mujoco model="tbar">
+        
+    <statistic extent="2" meansize=".05"/>
 
-    <include file="scene.xml"/>
+    <visual>
+        <rgba haze="0.15 0.25 0.35 1"/>
+        <quality shadowsize="2048"/>
+        <map stiffness="700" shadowscale="0.5" fogstart="10" fogend="15" zfar="40" haze="0.3"/>
+    </visual>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1=".4 .6 .8" rgb2="0 0 0" width="800" height="800" mark="random" markrgb="1 1 1"/>
+        <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 0.15 0.2"
+            width="512" height="512" mark="cross" markrgb=".8 .8 .8"/>
+
+        <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true"/>
+    </asset>
+    
+    <worldbody>
+        <light directional="true" diffuse=".8 .8 .8" specular=".2 .2 .2" pos="0 0 5" dir="0 0 -1"/>
+        <geom name="floor"  pos="0 0 -0.1" size="10 10 0.125" type="plane" material="matplane" condim="3" friction=".9 .05 .05"/>
+    </worldbody>
+
+    
+    <visual>
+        <headlight ambient=".4 .4 .4" diffuse=".8 .8 .8" specular="0.1 0.1 0.1"/>
+        <map znear=".01"/>
+        <quality shadowsize="2048"/>
+    </visual>
+    
 
     <option timestep="0.002" iterations="100" solver="PGS" jacobian="dense" gravity = "0 0 -9.8" viscosity="0"/>
 
@@ -13,7 +40,7 @@
     
     <default>
         <motor ctrllimited="false" ctrlrange="-100 100"/>
-        <tendon stiffness="100" damping="1" range=".5 2" springlength=".5" frictionloss=".2"/>
+        <tendon stiffness="100" damping="1" springlength=".5" frictionloss=".2"/>
         <geom size="0.02" mass=".1"/>
         <site size="0.04"/>
         <camera pos="0 -10 0"/>

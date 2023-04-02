@@ -14,7 +14,7 @@ cables = [[0, 2], [0, 3], [1, 2], [1, 3]]
 
 actuators = [0, 2]
 
-tbar = Tensegrity('Tbar', nodes, bars, cables, actuators)
+tbar = Tensegrity('tbar', nodes, bars, cables, actuators)
 dirname = osp.dirname(__file__)
 tbar.create_xml(dirname)
 # print(nodes[0])
