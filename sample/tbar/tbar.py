@@ -16,5 +16,5 @@ actuators = [0, 2]
 
 tbar = Tensegrity('tbar', nodes, bars, cables, actuators)
 dirname = osp.dirname(__file__)
-tbar.create_xml(dirname)
+tbar.create_xml(dirname, solver="Newton", integrator="RK4")
 # print(nodes[0])

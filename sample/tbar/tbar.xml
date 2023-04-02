@@ -30,7 +30,7 @@
     </visual>
     
 
-    <option timestep="0.002" iterations="100" solver="PGS" jacobian="dense" gravity = "0 0 -9.8" viscosity="0"/>
+    <option timestep="0.002" iterations="100" solver="Newton" integrator="RK4" jacobian="dense" gravity = "0 0 -9.8" viscosity="0"/>
 
     <size njmax="5000" nconmax="500" nstack="5000000"/>
 

@@ -26,15 +26,23 @@ class Tensegrity:
         self.cables = cables
         self.actuators = actuators
 
-    def create_xml(self, path, stiffness=100, damping=1):
+    def create_xml(
+            self,
+            path,
+            solver="Newton",
+            integrator="RK4",
+            stiffness=100,
+            damping=1):
         """
         Create xml model for tensegrity
         Args:
             path: Absolute path of folder for storing xml
+            solver: Constraint solver algorithms (PGS / CG / Newton)
+            integrator: Numerical integrator (Euler / RK4 / implicit)
             stiffness: stiffness of cables, default 100
             damping: damping of cables, default 1
 
-        Returns: a xml file
+        Returns: a xml file in the same folder
 
         """
         # create scenic settings
@@ -54,7 +62,7 @@ class Tensegrity:
 
         default = f"""
 
-    <option timestep="0.002" iterations="100" solver="PGS" jacobian="dense" gravity = "0 0 -9.8" viscosity="0"/>
+    <option timestep="0.002" iterations="100" solver="{solver}" integrator="{integrator}" jacobian="dense" gravity = "0 0 -9.8" viscosity="0"/>
 
     <size njmax="5000" nconmax="500" nstack="5000000"/>
 
