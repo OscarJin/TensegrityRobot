@@ -32,7 +32,8 @@ class Tensegrity:
             solver="Newton",
             integrator="RK4",
             stiffness=100,
-            damping=1):
+            damping=1,
+            ctrl_range=30):
         """
         Create xml model for tensegrity
         Args:
@@ -41,6 +42,7 @@ class Tensegrity:
             integrator: Numerical integrator (Euler / RK4 / implicit)
             stiffness: stiffness of cables, default 100
             damping: damping of cables, default 1
+            ctrl_range: range of motor control
 
         Returns: a xml file in the same folder
 
@@ -71,7 +73,7 @@ class Tensegrity:
     </asset>
     
     <default>
-        <motor ctrllimited="false" ctrlrange="-100 100"/>
+        <motor ctrllimited="false" ctrlrange="-{ctrl_range} {ctrl_range}"/>
         <tendon stiffness="{stiffness}" damping="{damping}" springlength=".5" frictionloss=".2"/>
         <geom size="0.02" mass=".1"/>
         <site size="0.04"/>
@@ -90,7 +92,7 @@ class Tensegrity:
             node1 = self.nodes[self.bars[i][0]]
             node2 = self.nodes[self.bars[i][1]]
             bar_xml = f"""
-        <body>  
+        <body name="bar{i + 1}">  
             <geom name="bar{i + 1}" type="capsule" fromto="{node1[0]} {node1[1]} {node1[2]} {node2[0]} {node2[1]} {node2[2]}" material="rod"/>
             <site name="b{self.bars[i][0]}" pos="{node1[0]} {node1[1]} {node1[2]}"/>
             <site name="b{self.bars[i][1]}" pos="{node2[0]} {node2[1]} {node2[2]}"/>
