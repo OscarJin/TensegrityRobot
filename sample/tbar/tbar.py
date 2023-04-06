@@ -26,5 +26,15 @@ tbar.register_gym(des)
 
 env = gym.make(tbar.get_name, xml_file=tbar.get_filename, bar_num=2)
 observation, info = env.reset()
-print(observation)
+
+for _ in range(1000):
+    action = env.action_space.sample()
+    observation, reward, terminated, truncated, info = env.step(action)
+
+    if terminated or truncated:
+        observation, info = env.reset()
+
+print(info)
+env.close()
+
 tbar.clean(des)
