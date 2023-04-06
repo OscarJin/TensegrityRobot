@@ -1,5 +1,8 @@
 import random
 import numpy as np
+from operator import attrgetter
+import copy
+from concurrent import futures
 
 
 class Chromosome(object):
@@ -25,6 +28,8 @@ class TensegGA(object):
             strut_num,
             population_size=20,
             generations=100,
+            tournament_size=3,
+            maximize_fitness=True,
             random_state=None
     ):
         """
@@ -49,8 +54,13 @@ class TensegGA(object):
 
         self._population_size = population_size
         self._generations = generations
+        self._tournament_size = tournament_size
+        self._mutation_probability = 38 * self._strut_num / 10000
+        self._crossover_probability = 1-self._mutation_probability
 
         self._current_generation = []
+
+        self._maximize_fitness = maximize_fitness
 
         self._random = random.Random(random_state)
 
@@ -89,20 +99,26 @@ class TensegGA(object):
         return child1, child2
 
     def mutate(self, individual):
-        # Reverse the bit of a random index in an individual.
+        """Reverse the bit of a random index in an individual."""
         mutate_index = self._random.randrange(len(individual))
         print(mutate_index)
         individual[mutate_index] = (0, 1)[individual[mutate_index] == 0]
 
     def random_selection(self, population):
-        # Select and return a random member of the population.
+        """Select and return a random member of the population."""
         return self._random.choice(population)
 
     def tournament_selection(self, population):
-        pass
+        """Select a random number of individuals from the population and
+        return the fittest member of them all.
+        """
+        members = self._random.sample(population, self._tournament_size)
+        members.sort(
+            key=attrgetter('fitness'), reverse=self._maximize_fitness)
+        return members[0]
 
     def create_initial_population(self):
-        # Create members of the first population randomly
+        """Create members of the first population randomly"""
         initial_population = []
         for _ in range(self._population_size):
             gene = self.create_individual()
@@ -111,6 +127,21 @@ class TensegGA(object):
         self._current_generation = initial_population
 
     def calculate_population_fitness(self, n_workers=None, parallel_type="processing"):
+        pass
+
+    def rank_population(self):
+        """Sort the population by fitness according to the order defined by
+                maximise_fitness.
+        """
+        self._current_generation.sort(
+            key=attrgetter('fitness'), reverse=self._maximize_fitness
+        )
+
+    def create_new_population(self):
+        """Create a new population using the genetic operators (selection,
+        crossover, and mutation) supplied.
+        """
+
         pass
 
     def create_first_generation(self, n_workers=None, parallel_type="processing"):
