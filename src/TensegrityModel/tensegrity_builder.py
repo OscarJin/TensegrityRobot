@@ -2,6 +2,7 @@ import os.path as osp
 from src.TensegrityModel.scene import create_scene
 from gymnasium.envs.registration import register
 import subprocess
+import os
 
 
 class Tensegrity:
@@ -27,10 +28,10 @@ class Tensegrity:
         """
         Args:
             name (string): name of the tensegrity
-            nodes (list): coordinates of nodes, the list should be in N*3 shape
-            bars (list): pairs of bars, each bar is a list of the two ends
-            cables (list); pairs of cables
-            actuators (list): no. of actuated cables
+            nodes: coordinates of nodes, the list should be in N*3 shape
+            bars: pairs of bars, each bar is a list of the two ends
+            cables: pairs of cables
+            actuators: no. of actuated cables
             path (string): Absolute path of folder for storing xml
             solver (string): Constraint solver algorithms (PGS / CG / Newton)
             integrator (string): Numerical integrator (Euler / RK4 / implicit)
@@ -176,6 +177,9 @@ class Tensegrity:
             max_episode_steps=1000,
         )
         pass
+
+    def clean(self, des):
+        os.remove(osp.join(des, self._xml_filename))
 
     @property
     def get_name(self):

@@ -2,19 +2,20 @@ from src.TensegrityModel.tensegrity_builder import Tensegrity
 from src.TensegrityModel.envs import TensegEnv
 import os.path as osp
 import gymnasium as gym
+import numpy as np
 
-nodes = [
+nodes = np.array([
     [-1, 0, 0],
     [1, 0, 0],
     [0, -1, 0],
     [0, 1, 0]
-]
+])
 
-bars = [[0, 1], [2, 3]]
+bars = np.array([[0, 1], [2, 3]])
 
-cables = [[0, 2], [0, 3], [1, 2], [1, 3]]
+cables = np.array([[0, 2], [0, 3], [1, 2], [1, 3]])
 
-actuators = [0, 1, 2, 3]
+actuators = np.array([0, 1, 2, 3])
 
 dirname = osp.dirname(__file__)
 des = '/home/oscar/anaconda3/envs/gym/lib/python3.8/site-packages/gymnasium/envs/mujoco/assets'
@@ -26,3 +27,4 @@ tbar.register_gym(des)
 env = gym.make(tbar.get_name, xml_file=tbar.get_filename, bar_num=2)
 observation, info = env.reset()
 print(observation)
+tbar.clean(des)
