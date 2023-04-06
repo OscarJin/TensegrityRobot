@@ -1,1 +1,1 @@
-from src.TensegrityModel.tensegrity_ga.evolution import TensegGA
+from src.TensegrityModel.tensegrity_ga.tensegrity_ga import TensegGA
