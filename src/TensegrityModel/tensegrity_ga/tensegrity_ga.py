@@ -44,6 +44,7 @@ class TensegGA(object):
         self._node_num = 2 * strut_num
         self._link_num = 4 * strut_num
         self._cable_num = 3 * strut_num
+        # original links, do not directly modify!
         self._links = np.empty(shape=(self._link_num, 2), dtype=int)
         for i in range(self._node_num):
             self._links[2*i][0] = self._links[2*i+1][0] = i
@@ -65,7 +66,9 @@ class TensegGA(object):
         self._random = random.Random(random_state)
 
     def create_individual(self):
-        x = y = z = np.random.rand(self._node_num)
+        x = np.random.rand(self._node_num)
+        y = np.random.rand(self._node_num)
+        z = np.random.rand(self._node_num)
         gene = np.column_stack((x, y, z)).flatten()
 
         for _ in range(2 * self._strut_num):
@@ -91,6 +94,31 @@ class TensegGA(object):
             gene = np.append(gene, node_chosen).flatten()
 
         return gene
+
+    def decode(self, gene):
+        """
+        Decode gene into xml-readable data
+        Args:
+            gene:
+
+        Returns: node (node num * 3), bars (bar num * 2), cables (cable num * 2),
+        actuators(cable num, default all cables)
+
+        """
+        nodes = gene[:self._node_num * 3].reshape(self._node_num, 3)
+
+        shuffles = gene[self._node_num * 3:].reshape(8 * self._strut_num, 4)
+        links = np.copy(self._links)
+        for shuffle in shuffles:
+            link1, link2 = int(shuffle[0]), int(shuffle[1])
+            node1, node2 = int(shuffle[2]), int(shuffle[3])
+            if links[link1][1-node1] != links[link2][node2] and links[link2][1-node2] != links[link1][node1]:
+                links[link1][node1], links[link2][node2] = links[link2][node2], links[link1][node1]
+        bars = np.array([links[i] for i in self._struts])
+        cables = np.array([links[i] for i in self._cables])
+        actuators = np.arange(self._cable_num)
+
+        return nodes, bars, cables, actuators
 
     def crossover(self, parent1, parent2):
         crossover_index = self._random.randrange(1, len(parent1))
