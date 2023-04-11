@@ -1,0 +1,230 @@
+
+<mujoco model="best">
+        
+    <statistic extent="2" meansize=".05"/>
+
+    <visual>
+        <rgba haze="0.15 0.25 0.35 1"/>
+        <quality shadowsize="2048"/>
+        <map stiffness="700" shadowscale="0.5" fogstart="10" fogend="15" zfar="40" haze="0.3"/>
+    </visual>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1=".4 .6 .8" rgb2="0 0 0" width="800" height="800" mark="random" markrgb="1 1 1"/>
+        <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 0.15 0.2"
+            width="512" height="512" mark="cross" markrgb=".8 .8 .8"/>
+
+        <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true"/>
+    </asset>
+    
+    <worldbody>
+        <light directional="true" diffuse=".8 .8 .8" specular=".2 .2 .2" pos="0 0 5" dir="0 0 -1"/>
+        <geom name="floor"  pos="0 0 -0.1" size="10 10 0.125" type="plane" material="matplane" condim="3" friction=".9 .05 .05"/>
+    </worldbody>
+
+    
+    <visual>
+        <headlight ambient=".4 .4 .4" diffuse=".8 .8 .8" specular="0.1 0.1 0.1"/>
+        <map znear=".01"/>
+        <quality shadowsize="2048"/>
+    </visual>
+    
+
+    <option timestep="0.002" iterations="100" solver="Newton" integrator="RK4" jacobian="dense" gravity = "0 0 -9.8" viscosity="0"/>
+
+    <size njmax="5000" nconmax="500" nstack="5000000"/>
+
+    <asset>
+        <material name="rod" rgba=".7 .5 .3 1"/>
+    </asset>
+    
+    <default>
+        <motor ctrllimited="false" ctrlrange="-30 30"/>
+        <tendon stiffness="100" damping="0.1" springlength=".5" frictionloss=".2"/>
+        <geom size="0.02" mass=".1"/>
+        <site size="0.04"/>
+        <camera pos="0 -10 0"/>
+    </default>
+        
+    <worldbody>
+        
+        <body name="bar1">  
+            <geom name="bar1" type="capsule" fromto="0.4997819512539178 0.25807990896183464 0.9719759545662928 0.6326987762557478 0.49600511918447654 0.7843366787538243" material="rod"/>
+            <site name="b0" pos="0.4997819512539178 0.25807990896183464 0.9719759545662928"/>
+            <site name="b6" pos="0.6326987762557478 0.49600511918447654 0.7843366787538243"/>
+            <joint name="r1" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
+        </body>
+
+        <body name="bar2">  
+            <geom name="bar2" type="capsule" fromto="0.5695680797931161 0.3855372802697361 0.5992354008844227 0.7461748822565698 0.9565496804865508 0.005531106544125253" material="rod"/>
+            <site name="b5" pos="0.5695680797931161 0.3855372802697361 0.5992354008844227"/>
+            <site name="b4" pos="0.7461748822565698 0.9565496804865508 0.005531106544125253"/>
+            <joint name="r2" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
+        </body>
+
+        <body name="bar3">  
+            <geom name="bar3" type="capsule" fromto="0.8800605426037693 0.6360205953485137 0.7046057534948661 0.3487988110656084 0.4183630898269428 0.9597800021458652" material="rod"/>
+            <site name="b9" pos="0.8800605426037693 0.6360205953485137 0.7046057534948661"/>
+            <site name="b7" pos="0.3487988110656084 0.4183630898269428 0.9597800021458652"/>
+            <joint name="r3" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
+        </body>
+
+        <body name="bar4">  
+            <geom name="bar4" type="capsule" fromto="0.46634059551927987 0.9761710810553089 0.9328244109181815 0.9319285388934699 0.6686389161825804 0.6859482377846319" material="rod"/>
+            <site name="b2" pos="0.46634059551927987 0.9761710810553089 0.9328244109181815"/>
+            <site name="b8" pos="0.9319285388934699 0.6686389161825804 0.6859482377846319"/>
+            <joint name="r4" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
+        </body>
+
+        <body name="bar5">  
+            <geom name="bar5" type="capsule" fromto="0.8883771593715976 0.0 0.09959592806988538 0.005936556599570153 0.8676189169476975 0.2582161023818741" material="rod"/>
+            <site name="b11" pos="0.8883771593715976 0.0 0.09959592806988538"/>
+            <site name="b3" pos="0.005936556599570153 0.8676189169476975 0.2582161023818741"/>
+            <joint name="r5" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
+        </body>
+
+        <body name="bar6">  
+            <geom name="bar6" type="capsule" fromto="0.9860318542008026 0.2536117814756347 0.2579440523954848 0.7207848588456561 0.08986235171049073 0.0" material="rod"/>
+            <site name="b10" pos="0.9860318542008026 0.2536117814756347 0.2579440523954848"/>
+            <site name="b1" pos="0.7207848588456561 0.08986235171049073 0.0"/>
+            <joint name="r6" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
+        </body>
+
+    </worldbody>
+        
+    <tendon>
+        
+        <spatial name="S0" width="0.02">
+            <site site="b2"/>
+            <site site="b5"/>
+        </spatial>
+
+        <spatial name="S1" width="0.02">
+            <site site="b10"/>
+            <site site="b1"/>
+        </spatial>
+
+        <spatial name="S2" width="0.02">
+            <site site="b4"/>
+            <site site="b8"/>
+        </spatial>
+
+        <spatial name="S3" width="0.02">
+            <site site="b10"/>
+            <site site="b6"/>
+        </spatial>
+
+        <spatial name="S4" width="0.02">
+            <site site="b7"/>
+            <site site="b8"/>
+        </spatial>
+
+        <spatial name="S5" width="0.02">
+            <site site="b3"/>
+            <site site="b5"/>
+        </spatial>
+
+        <spatial name="S6" width="0.02">
+            <site site="b4"/>
+            <site site="b11"/>
+        </spatial>
+
+        <spatial name="S7" width="0.02">
+            <site site="b3"/>
+            <site site="b11"/>
+        </spatial>
+
+        <spatial name="S8" width="0.02">
+            <site site="b4"/>
+            <site site="b7"/>
+        </spatial>
+
+        <spatial name="S9" width="0.02">
+            <site site="b9"/>
+            <site site="b7"/>
+        </spatial>
+
+        <spatial name="S10" width="0.02">
+            <site site="b0"/>
+            <site site="b6"/>
+        </spatial>
+
+        <spatial name="S11" width="0.02">
+            <site site="b2"/>
+            <site site="b1"/>
+        </spatial>
+
+        <spatial name="S12" width="0.02">
+            <site site="b3"/>
+            <site site="b10"/>
+        </spatial>
+
+        <spatial name="S13" width="0.02">
+            <site site="b8"/>
+            <site site="b11"/>
+        </spatial>
+
+        <spatial name="S14" width="0.02">
+            <site site="b9"/>
+            <site site="b1"/>
+        </spatial>
+
+        <spatial name="S15" width="0.02">
+            <site site="b5"/>
+            <site site="b6"/>
+        </spatial>
+
+        <spatial name="S16" width="0.02">
+            <site site="b2"/>
+            <site site="b0"/>
+        </spatial>
+
+        <spatial name="S17" width="0.02">
+            <site site="b0"/>
+            <site site="b9"/>
+        </spatial>
+
+    </tendon>
+        
+    <actuator>
+        
+        <motor tendon="S0" gear="1"/>
+
+        <motor tendon="S1" gear="1"/>
+
+        <motor tendon="S2" gear="1"/>
+
+        <motor tendon="S3" gear="1"/>
+
+        <motor tendon="S4" gear="1"/>
+
+        <motor tendon="S5" gear="1"/>
+
+        <motor tendon="S6" gear="1"/>
+
+        <motor tendon="S7" gear="1"/>
+
+        <motor tendon="S8" gear="1"/>
+
+        <motor tendon="S9" gear="1"/>
+
+        <motor tendon="S10" gear="1"/>
+
+        <motor tendon="S11" gear="1"/>
+
+        <motor tendon="S12" gear="1"/>
+
+        <motor tendon="S13" gear="1"/>
+
+        <motor tendon="S14" gear="1"/>
+
+        <motor tendon="S15" gear="1"/>
+
+        <motor tendon="S16" gear="1"/>
+
+        <motor tendon="S17" gear="1"/>
+
+    </actuator>
+        
+</mujoco>
+        

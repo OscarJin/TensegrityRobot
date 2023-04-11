@@ -1,16 +1,14 @@
-import src.TensegrityModel.tensegrity_ga as GA
+import src.TensegrityModel.tensegrity_ga as ga
 from src.TensegrityModel.tensegrity_builder import Tensegrity
 import os.path as osp
 
-ga = GA.TensegGA(strut_num=6)
-p1 = ga.create_individual()
-# print(p1)
+test_ga = ga.TensegrityGA(6, verbose=True)
 
-nodes, bars, cables, actuators = ga.decode(p1)
-nodes *= 2
+test_ga.run()
+print(test_ga.best_individual[0])
+nodes, bars, cables, actuators = test_ga.decode(test_ga.best_individual[1])
 
 dirname = osp.dirname(__file__)
-
-P1 = Tensegrity('tbar', nodes, bars, cables, actuators,
-                path=dirname, solver="Newton", integrator="RK4", stiffness=10, damping=.01)
-P1.create_xml()
+best = Tensegrity('best', nodes, bars, cables, actuators,
+                  path=dirname, solver="Newton", integrator="RK4", stiffness=100, damping=.1)
+best.create_xml()

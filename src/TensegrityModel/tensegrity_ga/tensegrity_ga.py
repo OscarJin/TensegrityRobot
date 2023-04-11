@@ -3,6 +3,7 @@ import numpy as np
 from operator import attrgetter
 import copy
 from concurrent import futures
+from src.TensegrityModel.tensegrity_builder import Tensegrity
 
 
 class Chromosome(object):
@@ -21,7 +22,7 @@ class Chromosome(object):
         return repr((self.fitness, self.genes))
 
 
-class TensegGA(object):
+class TensegrityGA(object):
 
     def __init__(
             self,
@@ -29,8 +30,10 @@ class TensegGA(object):
             population_size=20,
             generations=100,
             tournament_size=3,
+            elitism=True,
             maximize_fitness=True,
-            random_state=None
+            verbose=False,
+            random_state=None,
     ):
         """
         Args:
@@ -58,11 +61,13 @@ class TensegGA(object):
         self._tournament_size = tournament_size
         self._mutation_probability = 38 * self._strut_num / 10000
         self._crossover_probability = 1-self._mutation_probability
+        self._elitism = elitism
 
         self._current_generation = []
 
         self._maximize_fitness = maximize_fitness
 
+        self._verbose = verbose
         self._random = random.Random(random_state)
 
     def create_individual(self):
@@ -120,6 +125,15 @@ class TensegGA(object):
 
         return nodes, bars, cables, actuators
 
+    def fitness(self, gene):
+        """Temporarily volume of the tensegrity"""
+        nodes, _, _, _ = self.decode(gene)
+        x_max, y_max, z_max = nodes.max(axis=0)
+        x_min, y_min, z_min = nodes.min(axis=0)
+        volume = (x_max-x_min) * (y_max-y_min) * (z_max-z_min)
+        return volume
+        pass
+
     def crossover(self, parent1, parent2):
         crossover_index = self._random.randrange(1, len(parent1))
         child1 = np.append(parent1[:crossover_index], parent2[crossover_index:])
@@ -129,7 +143,6 @@ class TensegGA(object):
     def mutate(self, individual):
         """Reverse the bit of a random index in an individual."""
         mutate_index = self._random.randrange(len(individual))
-        print(mutate_index)
         individual[mutate_index] = (0, 1)[individual[mutate_index] == 0]
 
     def random_selection(self, population):
@@ -155,7 +168,26 @@ class TensegGA(object):
         self._current_generation = initial_population
 
     def calculate_population_fitness(self, n_workers=None, parallel_type="processing"):
-        pass
+        """Calculate the fitness of every member of the given population using
+           the supplied fitness_function.
+        """
+        if n_workers == 1:
+            for individual in self._current_generation:
+                individual.fitness = self.fitness(individual.genes)
+        else:
+            if "process" in parallel_type.lower():
+                executor = futures.ProcessPoolExecutor(max_workers=n_workers)
+            else:
+                executor = futures.ThreadPoolExecutor(max_workers=n_workers)
+                # Create two lists from the same size to be passed as args to the
+                # map function.
+            genes = [individual.genes for individual in self._current_generation]
+
+            with executor as pool:
+                results = pool.map(self.fitness, genes)
+
+            for individual, result in zip(self._current_generation, results):
+                individual.fitness = result
 
     def rank_population(self):
         """Sort the population by fitness according to the order defined by
@@ -169,20 +201,81 @@ class TensegGA(object):
         """Create a new population using the genetic operators (selection,
         crossover, and mutation) supplied.
         """
+        new_population = []
+        elite = copy.deepcopy(self._current_generation[0])
+        selection = self.tournament_selection
 
-        pass
+        while len(new_population) < self._population_size:
+            parent_1 = copy.deepcopy(selection(self._current_generation))
+            parent_2 = copy.deepcopy(selection(self._current_generation))
+
+            child_1, child_2 = parent_1, parent_2
+            child_1.fitness, child_2.fitness = 0, 0
+
+            can_crossover = self._random.random() < self._crossover_probability
+            can_mutate = self._random.random() < self._mutation_probability
+
+            if can_crossover:
+                child_1.genes, child_2.genes = self.crossover(parent_1.genes, parent_2.genes)
+
+            if can_mutate:
+                self.mutate(child_1.genes)
+                self.mutate(child_2.genes)
+
+            new_population.append(child_1)
+            if len(new_population) < self._population_size:
+                new_population.append(child_2)
+
+        if self._elitism:
+            new_population[0] = elite
+
+        self._current_generation = new_population
 
     def create_first_generation(self, n_workers=None, parallel_type="processing"):
-        pass
+        """Create the first population, calculate the population's fitness and
+                rank the population by fitness according to the order specified.
+        """
+        self.create_initial_population()
+        self.calculate_population_fitness(
+            n_workers=n_workers, parallel_type=parallel_type
+        )
+        self.rank_population()
 
     def create_next_generation(self, n_workers=None, parallel_type="processing"):
-        pass
+        """Create subsequent populations, calculate the population fitness and
+           rank the population by fitness in the order specified.
+        """
+        self.create_new_population()
+        self.calculate_population_fitness(
+            n_workers=n_workers, parallel_type=parallel_type
+        )
+        self.rank_population()
+        if self._verbose:
+            print("Fitness: %f" % self.best_individual[0])
 
     def run(self, n_workers=None, parallel_type="processing"):
-        pass
+        """Run (solve) the Genetic Algorithm."""
+        self.create_first_generation(
+            n_workers=n_workers, parallel_type=parallel_type
+        )
 
+        for _ in range(1, self._generations):
+            self.create_next_generation(
+                n_workers=n_workers, parallel_type=parallel_type
+            )
+
+    @property
     def best_individual(self):
+        """Return the individual with the best fitness in the current
+           generation.
+        """
+        best = self._current_generation[0]
+        return best.fitness, best.genes
         pass
 
+    @property
     def last_generation(self):
+        """Return members of the last generation as a generator function."""
+        return ((member.fitness, member.genes) for member
+                in self._current_generation)
         pass
