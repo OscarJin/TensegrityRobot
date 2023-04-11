@@ -5,7 +5,7 @@ Design, fabrication, control and simulation of tensegrity robots
 - Ubuntu
 - Python 3.8.16 (Anaconda)
 - Gymnasium 0.28.1 + Mujoco 2.3.3 (See [Documentation][gym-doc])
-- Stable baselines 3 for Gymnasium (See [installation][sb3-doc])
+- Stable baselines 3 for Gymnasium (See [Installation][sb3-doc])
 - Pytorch 1.13.1
 
 [gym-doc]: https://gymnasium.farama.org/environments/mujoco/
@@ -22,7 +22,7 @@ Just input coordinates of nodes, pairs of bars and cables, and generate the XML 
 The Mujoco model for tensegrity may not be accurate, since it has not yet been verified by the real world.
 
 ## Gymnasium Environment for Tensegrity
-A Gymnasium environment has been built for tesegrity robots.
+A Gymnasium environment has been built for tensegrity robots.
 
 ### Action Space
 
@@ -80,3 +80,25 @@ If `terminate_when_unhealthy=True` is passed during construction (which is the d
 2. Termination: The ant is unhealthy
 
 If `terminate_when_unhealthy=False` is passed, the episode is ended only when 1000 timesteps are exceeded.
+
+## Exploration of Tensegrity Design Space
+GA is applied to explore the design space of tensegrity. To use GA, import `tensegrity_ga` and initiate the 
+`TensegrityGA` class.
+```python
+import src.TensegrityModel.tensegrity_ga as ga
+tensegrity_ga = ga.TensegrityGA(6)
+tensegrity_ga.run()
+print(tensegrity_ga.best_individual[0])
+```
+
+### Encoding
+Please refer to the following article:
+
+Paul, Chandana, Hod Lipson, and Francisco J. Valero Cuevas. "Evolutionary form-finding of tensegrity structures." 
+_Proceedings of the 7th annual conference on Genetic and evolutionary computation._ 2005.
+
+### Fitness
+
+_Warning:_ Fitness function is still under development.
+
+Temporarily, volume of the bounding box is selected as the fitness criterion.
