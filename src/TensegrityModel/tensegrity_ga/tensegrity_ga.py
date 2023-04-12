@@ -4,6 +4,14 @@ from operator import attrgetter
 import copy
 from concurrent import futures
 from src.TensegrityModel.tensegrity_builder import Tensegrity
+from scipy.spatial import ConvexHull
+from scipy.spatial import Delaunay
+
+
+def bounding_box(vertices):
+    """Calculate 3D minimal bounding box volume of a tensegrity"""
+    hull = ConvexHull(vertices)
+    return hull.volume
 
 
 class Chromosome(object):
@@ -53,7 +61,7 @@ class TensegrityGA(object):
             self._links[2*i][0] = self._links[2*i+1][0] = i
             self._links[2*i][1] = (i+1) % self._node_num
             self._links[2*i+1][1] = (i+2) % self._node_num
-        self._struts = np.array([4*i for i in range(self._strut_num)], dtype=int)
+        self._struts = np.asarray([4*i for i in range(self._strut_num)], dtype=int)
         self._cables = np.delete(np.arange(self._link_num), self._struts)
 
         self._population_size = population_size
@@ -78,24 +86,24 @@ class TensegrityGA(object):
 
         for _ in range(2 * self._strut_num):
             random_i = self._random.sample(range(self._strut_num), 2)
-            strut_chosen = np.array([self._struts[i] for i in random_i])
+            strut_chosen = np.asarray([self._struts[i] for i in random_i])
             gene = np.append(gene, strut_chosen).flatten()
             random_node_1 = self._random.randint(0, 1)
             random_node_2 = self._random.randint(0, 1)
             # node_chosen = np.array([self._links[strut_chosen[0]][random_node_1],
             #                         self._links[strut_chosen[1]][random_node_2]])
-            node_chosen = np.array([random_node_1, random_node_2], dtype=int)
+            node_chosen = np.asarray([random_node_1, random_node_2], dtype=int)
             gene = np.append(gene, node_chosen).flatten()
 
         for _ in range(2 * self._cable_num):
             random_i = self._random.sample(range(self._cable_num), 2)
-            cable_chosen = np.array([self._cables[i] for i in random_i])
+            cable_chosen = np.asarray([self._cables[i] for i in random_i])
             gene = np.append(gene, cable_chosen).flatten()
             random_node_1 = self._random.randint(0, 1)
             random_node_2 = self._random.randint(0, 1)
             # node_chosen = np.array([self._links[cable_chosen[0]][random_node_1],
             #                         self._links[cable_chosen[1]][random_node_2]])
-            node_chosen = np.array([random_node_1, random_node_2], dtype=int)
+            node_chosen = np.asarray([random_node_1, random_node_2], dtype=int)
             gene = np.append(gene, node_chosen).flatten()
 
         return gene
@@ -119,8 +127,8 @@ class TensegrityGA(object):
             node1, node2 = int(shuffle[2]), int(shuffle[3])
             if links[link1][1-node1] != links[link2][node2] and links[link2][1-node2] != links[link1][node1]:
                 links[link1][node1], links[link2][node2] = links[link2][node2], links[link1][node1]
-        bars = np.array([links[i] for i in self._struts])
-        cables = np.array([links[i] for i in self._cables])
+        bars = np.asarray([links[i] for i in self._struts])
+        cables = np.asarray([links[i] for i in self._cables])
         actuators = np.arange(self._cable_num)
 
         return nodes, bars, cables, actuators
@@ -128,10 +136,7 @@ class TensegrityGA(object):
     def fitness(self, gene):
         """Temporarily volume of the tensegrity"""
         nodes, _, _, _ = self.decode(gene)
-        x_max, y_max, z_max = nodes.max(axis=0)
-        x_min, y_min, z_min = nodes.min(axis=0)
-        volume = (x_max-x_min) * (y_max-y_min) * (z_max-z_min)
-        return volume
+        return bounding_box(nodes)
         pass
 
     def crossover(self, parent1, parent2):

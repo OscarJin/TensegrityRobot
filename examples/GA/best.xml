@@ -40,7 +40,7 @@
     
     <default>
         <motor ctrllimited="false" ctrlrange="-30 30"/>
-        <tendon stiffness="100" damping="0.1" springlength=".5" frictionloss=".2"/>
+        <tendon stiffness="10" damping="0.01" springlength=".5" frictionloss=".2"/>
         <geom size="0.02" mass=".1"/>
         <site size="0.04"/>
         <camera pos="0 -10 0"/>
@@ -49,44 +49,44 @@
     <worldbody>
         
         <body name="bar1">  
-            <geom name="bar1" type="capsule" fromto="0.4997819512539178 0.25807990896183464 0.9719759545662928 0.6326987762557478 0.49600511918447654 0.7843366787538243" material="rod"/>
-            <site name="b0" pos="0.4997819512539178 0.25807990896183464 0.9719759545662928"/>
-            <site name="b6" pos="0.6326987762557478 0.49600511918447654 0.7843366787538243"/>
+            <geom name="bar1" type="capsule" fromto="0.8843412289070027 0.05892671840474695 0.6344176415786287 0.16475368340859387 0.2633338076063446 0.9775580028226235" material="rod"/>
+            <site name="b11" pos="0.8843412289070027 0.05892671840474695 0.6344176415786287"/>
+            <site name="b1" pos="0.16475368340859387 0.2633338076063446 0.9775580028226235"/>
             <joint name="r1" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
         </body>
 
         <body name="bar2">  
-            <geom name="bar2" type="capsule" fromto="0.5695680797931161 0.3855372802697361 0.5992354008844227 0.7461748822565698 0.9565496804865508 0.005531106544125253" material="rod"/>
-            <site name="b5" pos="0.5695680797931161 0.3855372802697361 0.5992354008844227"/>
-            <site name="b4" pos="0.7461748822565698 0.9565496804865508 0.005531106544125253"/>
+            <geom name="bar2" type="capsule" fromto="0.9966831818815666 0.3729790829877805 0.16915414762891479 0.8485737709528791 0.0 0.12251608588251794" material="rod"/>
+            <site name="b0" pos="0.9966831818815666 0.3729790829877805 0.16915414762891479"/>
+            <site name="b10" pos="0.8485737709528791 0.0 0.12251608588251794"/>
             <joint name="r2" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
         </body>
 
         <body name="bar3">  
-            <geom name="bar3" type="capsule" fromto="0.8800605426037693 0.6360205953485137 0.7046057534948661 0.3487988110656084 0.4183630898269428 0.9597800021458652" material="rod"/>
-            <site name="b9" pos="0.8800605426037693 0.6360205953485137 0.7046057534948661"/>
-            <site name="b7" pos="0.3487988110656084 0.4183630898269428 0.9597800021458652"/>
+            <geom name="bar3" type="capsule" fromto="0.0 0.5970024490387825 0.004272710327211771 0.6746588483984155 0.7494955682705033 0.7745566520353047" material="rod"/>
+            <site name="b4" pos="0.0 0.5970024490387825 0.004272710327211771"/>
+            <site name="b5" pos="0.6746588483984155 0.7494955682705033 0.7745566520353047"/>
             <joint name="r3" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
         </body>
 
         <body name="bar4">  
-            <geom name="bar4" type="capsule" fromto="0.46634059551927987 0.9761710810553089 0.9328244109181815 0.9319285388934699 0.6686389161825804 0.6859482377846319" material="rod"/>
-            <site name="b2" pos="0.46634059551927987 0.9761710810553089 0.9328244109181815"/>
-            <site name="b8" pos="0.9319285388934699 0.6686389161825804 0.6859482377846319"/>
+            <geom name="bar4" type="capsule" fromto="0.505312732354588 0.15481163876629922 0.0 0.9671355796284163 0.6264151756484467 0.9667962637231534" material="rod"/>
+            <site name="b9" pos="0.505312732354588 0.15481163876629922 0.0"/>
+            <site name="b3" pos="0.9671355796284163 0.6264151756484467 0.9667962637231534"/>
             <joint name="r4" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
         </body>
 
         <body name="bar5">  
-            <geom name="bar5" type="capsule" fromto="0.8883771593715976 0.0 0.09959592806988538 0.005936556599570153 0.8676189169476975 0.2582161023818741" material="rod"/>
-            <site name="b11" pos="0.8883771593715976 0.0 0.09959592806988538"/>
-            <site name="b3" pos="0.005936556599570153 0.8676189169476975 0.2582161023818741"/>
+            <geom name="bar5" type="capsule" fromto="0.09959212477695478 0.822228406052752 0.2174795338457558 0.26505372287154383 0.6832716324278395 0.24665742153742742" material="rod"/>
+            <site name="b8" pos="0.09959212477695478 0.822228406052752 0.2174795338457558"/>
+            <site name="b6" pos="0.26505372287154383 0.6832716324278395 0.24665742153742742"/>
             <joint name="r5" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
         </body>
 
         <body name="bar6">  
-            <geom name="bar6" type="capsule" fromto="0.9860318542008026 0.2536117814756347 0.2579440523954848 0.7207848588456561 0.08986235171049073 0.0" material="rod"/>
-            <site name="b10" pos="0.9860318542008026 0.2536117814756347 0.2579440523954848"/>
-            <site name="b1" pos="0.7207848588456561 0.08986235171049073 0.0"/>
+            <geom name="bar6" type="capsule" fromto="0.0 0.19878707186181988 0.6079679648243265 0.8915738415772558 0.9735043003364968 0.30655445448278507" material="rod"/>
+            <site name="b2" pos="0.0 0.19878707186181988 0.6079679648243265"/>
+            <site name="b7" pos="0.8915738415772558 0.9735043003364968 0.30655445448278507"/>
             <joint name="r6" type="free" pos="0 0 0" limited="false" damping="0" armature="0" stiffness="0.2"/> 
         </body>
 
@@ -96,92 +96,92 @@
         
         <spatial name="S0" width="0.02">
             <site site="b2"/>
-            <site site="b5"/>
+            <site site="b7"/>
         </spatial>
 
         <spatial name="S1" width="0.02">
-            <site site="b10"/>
-            <site site="b1"/>
+            <site site="b4"/>
+            <site site="b9"/>
         </spatial>
 
         <spatial name="S2" width="0.02">
-            <site site="b4"/>
-            <site site="b8"/>
+            <site site="b5"/>
+            <site site="b11"/>
         </spatial>
 
         <spatial name="S3" width="0.02">
-            <site site="b10"/>
-            <site site="b6"/>
+            <site site="b9"/>
+            <site site="b8"/>
         </spatial>
 
         <spatial name="S4" width="0.02">
+            <site site="b4"/>
             <site site="b7"/>
-            <site site="b8"/>
         </spatial>
 
         <spatial name="S5" width="0.02">
             <site site="b3"/>
-            <site site="b5"/>
+            <site site="b4"/>
         </spatial>
 
         <spatial name="S6" width="0.02">
-            <site site="b4"/>
-            <site site="b11"/>
+            <site site="b0"/>
+            <site site="b1"/>
         </spatial>
 
         <spatial name="S7" width="0.02">
-            <site site="b3"/>
-            <site site="b11"/>
-        </spatial>
-
-        <spatial name="S8" width="0.02">
-            <site site="b4"/>
-            <site site="b7"/>
-        </spatial>
-
-        <spatial name="S9" width="0.02">
-            <site site="b9"/>
-            <site site="b7"/>
-        </spatial>
-
-        <spatial name="S10" width="0.02">
-            <site site="b0"/>
-            <site site="b6"/>
-        </spatial>
-
-        <spatial name="S11" width="0.02">
-            <site site="b2"/>
-            <site site="b1"/>
-        </spatial>
-
-        <spatial name="S12" width="0.02">
-            <site site="b3"/>
+            <site site="b8"/>
             <site site="b10"/>
         </spatial>
 
-        <spatial name="S13" width="0.02">
-            <site site="b8"/>
-            <site site="b11"/>
+        <spatial name="S8" width="0.02">
+            <site site="b10"/>
+            <site site="b3"/>
         </spatial>
 
-        <spatial name="S14" width="0.02">
-            <site site="b9"/>
+        <spatial name="S9" width="0.02">
+            <site site="b6"/>
+            <site site="b2"/>
+        </spatial>
+
+        <spatial name="S10" width="0.02">
+            <site site="b6"/>
             <site site="b1"/>
         </spatial>
 
-        <spatial name="S15" width="0.02">
+        <spatial name="S11" width="0.02">
+            <site site="b1"/>
             <site site="b5"/>
-            <site site="b6"/>
+        </spatial>
+
+        <spatial name="S12" width="0.02">
+            <site site="b10"/>
+            <site site="b2"/>
+        </spatial>
+
+        <spatial name="S13" width="0.02">
+            <site site="b9"/>
+            <site site="b8"/>
+        </spatial>
+
+        <spatial name="S14" width="0.02">
+            <site site="b5"/>
+            <site site="b11"/>
+        </spatial>
+
+        <spatial name="S15" width="0.02">
+            <site site="b7"/>
+            <site site="b0"/>
         </spatial>
 
         <spatial name="S16" width="0.02">
-            <site site="b2"/>
             <site site="b0"/>
+            <site site="b6"/>
         </spatial>
 
         <spatial name="S17" width="0.02">
-            <site site="b0"/>
-            <site site="b9"/>
+            <site site="b11"/>
+            <site site="b3"/>
         </spatial>
 
     </tendon>
