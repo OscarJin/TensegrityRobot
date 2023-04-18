@@ -3,6 +3,7 @@ from src.TensegrityModel.scene import create_scene
 from gymnasium.envs.registration import register
 import subprocess
 import os
+import numpy as np
 
 
 class Tensegrity:
@@ -82,7 +83,7 @@ class Tensegrity:
     
     <default>
         <motor ctrllimited="false" ctrlrange="-{self._ctrl_range} {self._ctrl_range}"/>
-        <tendon stiffness="{self._stiffness}" damping="{self._damping}" springlength=".5" frictionloss=".2"/>
+        <tendon stiffness="{self._stiffness}" damping="{self._damping}" frictionloss=".2"/>
         <geom size="0.02" mass=".1"/>
         <site size="0.04"/>
         <camera pos="0 -10 0"/>
@@ -123,8 +124,9 @@ class Tensegrity:
         for i in range(len(self._cables)):
             node1 = self._cables[i][0]
             node2 = self._cables[i][1]
+            length = np.linalg.norm(self._nodes[node1]-self._nodes[node2])
             tendon_xml = f"""
-        <spatial name="S{i}" width="0.02">
+        <spatial name="S{i}" width="0.02" springlength="0 {length}">
             <site site="b{node1}"/>
             <site site="b{node2}"/>
         </spatial>

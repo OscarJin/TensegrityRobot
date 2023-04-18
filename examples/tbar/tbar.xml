@@ -40,7 +40,7 @@
     
     <default>
         <motor ctrllimited="false" ctrlrange="-30 30"/>
-        <tendon stiffness="10" damping="0.01" springlength=".5" frictionloss=".2"/>
+        <tendon stiffness="10" damping="0.01" frictionloss=".2"/>
         <geom size="0.02" mass=".1"/>
         <site size="0.04"/>
         <camera pos="0 -10 0"/>
@@ -66,22 +66,22 @@
         
     <tendon>
         
-        <spatial name="S0" width="0.02">
+        <spatial name="S0" width="0.02" springlength="0 1.4142135623730951">
             <site site="b0"/>
             <site site="b2"/>
         </spatial>
 
-        <spatial name="S1" width="0.02">
+        <spatial name="S1" width="0.02" springlength="0 1.4142135623730951">
             <site site="b0"/>
             <site site="b3"/>
         </spatial>
 
-        <spatial name="S2" width="0.02">
+        <spatial name="S2" width="0.02" springlength="0 1.4142135623730951">
             <site site="b1"/>
             <site site="b2"/>
         </spatial>
 
-        <spatial name="S3" width="0.02">
+        <spatial name="S3" width="0.02" springlength="0 1.4142135623730951">
             <site site="b1"/>
             <site site="b3"/>
         </spatial>
