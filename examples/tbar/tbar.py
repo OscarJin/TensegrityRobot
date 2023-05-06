@@ -20,7 +20,7 @@ actuators = np.array([0, 1, 2, 3])
 dirname = osp.dirname(__file__)
 des = '/home/oscar/anaconda3/envs/gym/lib/python3.8/site-packages/gymnasium/envs/mujoco/assets'
 tbar = Tensegrity('tbar', nodes, bars, cables, actuators,
-                  path=dirname, solver="Newton", integrator="RK4", stiffness=10, damping=.01)
+                  path=dirname, solver="Newton", integrator="RK4", stiffness=.1, damping=.05, ctrl_range=1)
 tbar.create_xml()
 tbar.register_gym(des)
 

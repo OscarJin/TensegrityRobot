@@ -39,8 +39,8 @@
     </asset>
     
     <default>
-        <motor ctrllimited="false" ctrlrange="-30 30"/>
-        <tendon stiffness="10" damping="0.01" frictionloss=".2"/>
+        <motor ctrllimited="false" ctrlrange="-1 1"/>
+        <tendon width="0.02" limited="true" range="0 2" stiffness="0.1" damping="0.05" frictionloss=".2"/>
         <geom size="0.02" mass=".1"/>
         <site size="0.04"/>
         <camera pos="0 -10 0"/>
@@ -66,22 +66,22 @@
         
     <tendon>
         
-        <spatial name="S0" width="0.02" springlength="0 1.4142135623730951">
+        <spatial name="S0" springlength="0 1.4142135623730951">
             <site site="b0"/>
             <site site="b2"/>
         </spatial>
 
-        <spatial name="S1" width="0.02" springlength="0 1.4142135623730951">
+        <spatial name="S1" springlength="0 1.4142135623730951">
             <site site="b0"/>
             <site site="b3"/>
         </spatial>
 
-        <spatial name="S2" width="0.02" springlength="0 1.4142135623730951">
+        <spatial name="S2" springlength="0 1.4142135623730951">
             <site site="b1"/>
             <site site="b2"/>
         </spatial>
 
-        <spatial name="S3" width="0.02" springlength="0 1.4142135623730951">
+        <spatial name="S3" springlength="0 1.4142135623730951">
             <site site="b1"/>
             <site site="b3"/>
         </spatial>
@@ -90,13 +90,13 @@
         
     <actuator>
         
-        <motor tendon="S0" gear="1"/>
+        <motor tendon="S0" gear="50"/>
 
-        <motor tendon="S1" gear="1"/>
+        <motor tendon="S1" gear="50"/>
 
-        <motor tendon="S2" gear="1"/>
+        <motor tendon="S2" gear="50"/>
 
-        <motor tendon="S3" gear="1"/>
+        <motor tendon="S3" gear="50"/>
 
     </actuator>
         

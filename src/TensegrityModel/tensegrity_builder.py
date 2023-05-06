@@ -25,6 +25,7 @@ class Tensegrity:
             stiffness=100,
             damping=1,
             ctrl_range=30,
+            gear=50,
     ):
         """
         Args:
@@ -39,6 +40,7 @@ class Tensegrity:
             stiffness: stiffness of cables, default 100
             damping: damping of cables, default 1
             ctrl_range: range of motor control
+            gear: gear of motor
         """
         self._name = name
         self._xml_filename = self._name + '.xml'
@@ -54,6 +56,7 @@ class Tensegrity:
         self._stiffness = stiffness
         self._damping = damping
         self._ctrl_range = ctrl_range
+        self._gear = gear
 
     def create_xml(self):
         # Create xml model for tensegrity
@@ -83,7 +86,7 @@ class Tensegrity:
     
     <default>
         <motor ctrllimited="false" ctrlrange="-{self._ctrl_range} {self._ctrl_range}"/>
-        <tendon stiffness="{self._stiffness}" damping="{self._damping}" frictionloss=".2"/>
+        <tendon width="0.02" limited="true" range="0 2" stiffness="{self._stiffness}" damping="{self._damping}" frictionloss=".2"/>
         <geom size="0.02" mass=".1"/>
         <site size="0.04"/>
         <camera pos="0 -10 0"/>
@@ -126,7 +129,7 @@ class Tensegrity:
             node2 = self._cables[i][1]
             length = np.linalg.norm(self._nodes[node1]-self._nodes[node2])
             tendon_xml = f"""
-        <spatial name="S{i}" width="0.02" springlength="0 {length}">
+        <spatial name="S{i}" springlength="0 {length}">
             <site site="b{node1}"/>
             <site site="b{node2}"/>
         </spatial>
@@ -146,7 +149,7 @@ class Tensegrity:
 
         for i in range(len(self._actuators)):
             actuator_xml = f"""
-        <motor tendon="S{self._actuators[i]}" gear="1"/>
+        <motor tendon="S{self._actuators[i]}" gear="{self._gear}"/>
 """
             xml_file.write(actuator_xml)
 
