@@ -5,7 +5,6 @@ import copy
 from concurrent import futures
 from src.TensegrityModel.tensegrity_builder import Tensegrity
 from scipy.spatial import ConvexHull
-from scipy.spatial import Delaunay
 
 
 def bounding_box(vertices):
@@ -19,6 +18,7 @@ class Chromosome(object):
     Chromosome class that encapsulates an individual's fitness and solution
     representation.
     """
+
     def __init__(self, genes):
         """Initialise the Chromosome"""
         self.genes = genes
@@ -42,6 +42,8 @@ class TensegrityGA(object):
             maximize_fitness=True,
             verbose=False,
             random_state=None,
+            gym_des=None,
+            dirname=None,
     ):
         """
         Args:
@@ -49,6 +51,9 @@ class TensegrityGA(object):
             population_size: number of candidate solutions in each generation
             generations: number of generations to evolve
             random_state: random seed. defaults to None
+            gym_des: destination folder of 'asset' in Gymnasium package,
+            usually `/home/$username$/anaconda3/envs/gym/lib/python3.8/site-packages/gymnasium/envs/mujoco/assets`
+            dirname: where to store .xml, just use osp.dirname(__file__)
         """
 
         self._strut_num = strut_num
@@ -58,17 +63,17 @@ class TensegrityGA(object):
         # original links, do not directly modify!
         self._links = np.empty(shape=(self._link_num, 2), dtype=int)
         for i in range(self._node_num):
-            self._links[2*i][0] = self._links[2*i+1][0] = i
-            self._links[2*i][1] = (i+1) % self._node_num
-            self._links[2*i+1][1] = (i+2) % self._node_num
-        self._struts = np.asarray([4*i for i in range(self._strut_num)], dtype=int)
+            self._links[2 * i][0] = self._links[2 * i + 1][0] = i
+            self._links[2 * i][1] = (i + 1) % self._node_num
+            self._links[2 * i + 1][1] = (i + 2) % self._node_num
+        self._struts = np.asarray([4 * i for i in range(self._strut_num)], dtype=int)
         self._cables = np.delete(np.arange(self._link_num), self._struts)
 
         self._population_size = population_size
         self._generations = generations
         self._tournament_size = tournament_size
         self._mutation_probability = 38 * self._strut_num / 10000
-        self._crossover_probability = 1-self._mutation_probability
+        self._crossover_probability = 1 - self._mutation_probability
         self._elitism = elitism
 
         self._current_generation = []
@@ -77,6 +82,9 @@ class TensegrityGA(object):
 
         self._verbose = verbose
         self._random = random.Random(random_state)
+
+        self._gym_des = gym_des
+        self._dirname = dirname
 
     def create_individual(self):
         x = np.random.rand(self._node_num)
@@ -125,7 +133,7 @@ class TensegrityGA(object):
         for shuffle in shuffles:
             link1, link2 = int(shuffle[0]), int(shuffle[1])
             node1, node2 = int(shuffle[2]), int(shuffle[3])
-            if links[link1][1-node1] != links[link2][node2] and links[link2][1-node2] != links[link1][node1]:
+            if links[link1][1 - node1] != links[link2][node2] and links[link2][1 - node2] != links[link1][node1]:
                 links[link1][node1], links[link2][node2] = links[link2][node2], links[link1][node1]
         bars = np.asarray([links[i] for i in self._struts])
         cables = np.asarray([links[i] for i in self._cables])
@@ -135,8 +143,27 @@ class TensegrityGA(object):
 
     def fitness(self, gene):
         """Temporarily volume of the tensegrity"""
-        nodes, _, _, _ = self.decode(gene)
-        return bounding_box(nodes)
+        nodes, bars, cables, actuators = self.decode(gene)
+        temp = Tensegrity('temp', nodes, bars, cables, actuators,
+                          path=self._dirname, solver="Newton", integrator="RK4", stiffness=1, damping=.05)
+        temp.create_xml()
+        env = temp.register_gym(self._gym_des)
+
+        observation, info = env.reset()
+        stable = True
+        for _ in range(1000):
+            observation, reward, terminated, truncated, info = env.step(action=np.zeros(env.action_space.shape))
+            if terminated:
+                stable = False
+                break
+
+        env.close()
+        temp.clean(self._gym_des, clean_file=True)
+
+        if stable:
+            return bounding_box(nodes)
+        else:
+            return 0
         pass
 
     def crossover(self, parent1, parent2):
@@ -147,7 +174,7 @@ class TensegrityGA(object):
 
     def mutate(self, individual):
         """Reverse the bit of a random index in an individual."""
-        mutate_index = self._random.randrange(len(individual))
+        mutate_index = self._random.randrange(3 * self._node_num)
         individual[mutate_index] = (0, 1)[individual[mutate_index] == 0]
 
     def random_selection(self, population):

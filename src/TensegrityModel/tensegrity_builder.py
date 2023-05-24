@@ -4,6 +4,7 @@ from gymnasium.envs.registration import register
 import subprocess
 import os
 import numpy as np
+import gymnasium as gym
 
 
 class Tensegrity:
@@ -180,11 +181,18 @@ class Tensegrity:
             id=self._name,
             entry_point="src.TensegrityModel.envs:TensegEnv",
             max_episode_steps=1000,
+            kwargs={'xml_file': self._xml_filename, 'bar_num': len(self._bars)},
         )
+        env = gym.make(self._name)
+        return env
         pass
 
-    def clean(self, des):
-        os.remove(osp.join(des, self._xml_filename))
+    def clean(self, des, clean_file=False):
+        del gym.envs.registration.registry[self._name]
+        if osp.exists(osp.join(des, self._xml_filename)):
+            os.remove(osp.join(des, self._xml_filename))
+        if clean_file:
+            os.remove(self._xml_path)
 
     @property
     def get_name(self):
