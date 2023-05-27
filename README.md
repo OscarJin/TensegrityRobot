@@ -33,7 +33,7 @@ parts.
 By default, observations do not include the x- and y-coordinates of `bar1` of the tensegrity. These may be included
 by passing `exclude_current_positions_from_obs=False` during construction.
 In that case, the observation space will have 13*{number of bars} dimensions where the first two dimensions
-represent the x- and y- coordinates of the ant's torso.
+represent the x- and y- coordinates of `bar1`.
 Regardless of whether `exclude_current_positions_from_obs` was set to true or false, the x- and y-coordinates of
 `bar1` will be returned in `info` with keys `"x_position"` and `"y_position"`, respectively.
 
@@ -77,7 +77,7 @@ If `terminate_when_unhealthy=True` is passed during construction (which is the d
    the episode ends when any of the following happens:
 
 1. Truncation: The episode duration reaches a 1000 timesteps
-2. Termination: The ant is unhealthy
+2. Termination: The tensengrity is unhealthy
 
 If `terminate_when_unhealthy=False` is passed, the episode is ended only when 1000 timesteps are exceeded.
 
